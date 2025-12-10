@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Nuestra historia</title>
 
 <style>
@@ -11,117 +11,226 @@
 :root{
   --bg:#000;
   --bg2:#140005;
-  --gold:#F5D36A;
-  --heart-red:#ff1a3a;
+  --gold:#f5d36a;
+  --heart:#ff1a3a;
   --neon-red:#ff073a;
-  --font:'Cinzel', serif;
+  --neon-green:#39ff14;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-  margin:0;
   height:100%;
+  margin:0;
   background:radial-gradient(circle at center,var(--bg2),var(--bg));
-  font-family:var(--font);
+  font-family:'Cinzel',serif;
   overflow:hidden;
 }
 
-.container{
-  position:relative;
-  height:100%;
+.screen{
+  min-height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
-  padding:clamp(20px,6vh,60px) 18px 0;
+  justify-content:space-between;
+  padding:18px;
   text-align:center;
-  z-index:10;
 }
 
-h1{
-  font-size:clamp(22px,5.5vw,34px);
-  line-height:1.45;
-  max-width:320px;
-  margin:0 auto;
+.text{
+  margin-top:8vh;
+  animation:fadeIn 2.5s ease forwards;
+}
+
+.text h1{
+  font-size:clamp(22px,6vw,30px);
+  line-height:1.5;
   color:var(--gold);
   text-shadow:
     0 0 10px rgba(245,211,106,.6),
-    0 0 30px rgba(245,211,106,.35);
+    0 0 25px rgba(245,211,106,.4);
 }
 
-p{
+.text p{
   margin-top:18px;
-  font-size:clamp(14px,4vw,17px);
+  font-size:15px;
   line-height:1.6;
-  max-width:300px;
-  color:#ff9aa8;
-  opacity:.95;
+  color:#ffb4c0;
 }
 
-.actions{
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-15px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.hearts{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.heart{
   position:absolute;
-  bottom:clamp(18px,6vh,40px);
-  left:50%;
-  transform:translateX(-50%);
+  bottom:-15vh;
+  width:34px;
+  height:34px;
+  filter:drop-shadow(0 0 12px rgba(255,50,70,.6));
+}
+
+.heart:before,.heart:after{
+  content:'';
+  position:absolute;
+  width:50%;
+  height:50%;
+  background:var(--heart);
+  border-radius:50%;
+}
+
+.heart:after{left:50%}
+
+.heart i{
+  position:absolute;
+  width:76%;
+  height:76%;
+  left:12%;
+  top:22%;
+  background:var(--heart);
+  transform:rotate(45deg);
+  border-radius:20%;
+}
+
+@keyframes floatUp{
+  to{
+    transform:translateY(-110vh) scale(1.2);
+    opacity:0;
+  }
+}
+
+.buttons{
   width:100%;
-  max-width:300px;
-  padding:0 18px;
+  max-width:320px;
   display:flex;
   flex-direction:column;
   gap:16px;
+  margin-bottom:4vh;
 }
 
-.button{
-  padding:14px 20px;
-  font-size:15px;
+.btn{
+  padding:15px;
   border-radius:999px;
+  font-size:16px;
   font-weight:700;
-  letter-spacing:1px;
-  cursor:pointer;
-}
-
-.red{
-  background:#1a0008;
-  color:var(--neon-red);
-  border:2px solid var(--neon-red);
-  box-shadow:0 0 14px rgba(255,7,58,.8);
+  border:2px solid;
+  background:#000;
 }
 
 .green{
-  background:#001b00;
-  color:#39ff14;
-  border:2px solid #39ff14;
+  color:var(--neon-green);
+  border-color:var(--neon-green);
   box-shadow:0 0 14px rgba(57,255,20,.8);
 }
 
-@media (max-height:620px){
-  h1{font-size:20px;}
-  p{font-size:14px;}
+.red{
+  color:var(--neon-red);
+  border-color:var(--neon-red);
+  box-shadow:0 0 14px rgba(255,7,58,.8);
 }
+
+.slippery{
+  position:fixed;
+  z-index:20;
+}
+
+.final{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  text-align:center;
+  padding:18px;
+  color:var(--neon-red);
+}
+.audio{
+  width:100%;
+  max-width:260px;
+  border-radius:20px;
+  box-shadow:0 0 18px rgba(255,7,58,.8);
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>
-    Quisiera contarte<br>
-    la historia de amor<br>
-    más bonita del mundo
-  </h1>
+<audio id="music" src="musica.mp3"></audio>
 
-  <p>
-    Pero antes necesito<br>
-    que tomes mi mano<br>
-    y prometamos algo<br><br>
-    escribirla juntos<br>
-    con el corazón
-  </p>
+<div class="screen">
+
+  <div class="text">
+    <h1>
+      Te contaría la historia de amor más hermosa del mundo  
+      pero primero necesito algo muy sencillo  
+    </h1>
+
+    <p>
+      Mírame con el corazón  
+      toma mi mano con el alma  
+      y prometamos escribir juntos cada capítulo de nuestro para siempre  
+    </p>
+  </div>
+
+  <div class="buttons">
+    <button class="btn green slippery" id="noBtn">💫 Aún no</button>
+    <button class="btn red" id="yesBtn">❤️ Aquí comienza nuestra historia ❤️</button>
+  </div>
+
 </div>
 
-<div class="actions">
-  <button class="button green">💫 Aún no</button>
-  <button class="button red">❤️ Aquí comienza nuestro siempre ❤️</button>
-</div>
+<div class="hearts" id="hearts"></div>
+
+<script>
+function r(min,max){return Math.random()*(max-min)+min}
+
+const hearts=document.getElementById('hearts');
+for(let i=0;i<18;i++){
+  const h=document.createElement('div');
+  h.className='heart';
+  h.style.left=r(0,100)+'%';
+  h.style.animation=`floatUp ${r(6,12)}s linear ${r(-5,0)}s infinite`;
+  h.appendChild(document.createElement('i'));
+  hearts.appendChild(h);
+}
+
+const noBtn=document.getElementById('noBtn');
+function escape(){
+  noBtn.style.left=r(10,window.innerWidth-noBtn.offsetWidth-10)+'px';
+  noBtn.style.top=r(10,window.innerHeight-noBtn.offsetHeight-10)+'px';
+}
+noBtn.addEventListener('touchstart',e=>{e.preventDefault();escape();});
+noBtn.addEventListener('mouseover',escape);
+
+document.getElementById('yesBtn').onclick=()=>{
+  const m=document.getElementById('music');
+  m.play().catch(()=>{});
+  document.body.innerHTML=`
+    <div class="final">
+      <h2>❤️ Te amo ❤️</h2>
+      <p>
+        No existen palabras suficientes  
+        para describir todo lo que siento por ti  
+        pero esta canción lleva lo que mi corazón no sabe decir  
+      </p>
+      <audio class="audio" controls autoplay>
+        <source src="musica.mp3" type="audio/mpeg">
+      </audio>
+    </div>`;
+};
+</script>
 
 </body>
 </html>
