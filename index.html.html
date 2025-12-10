@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>La historia que solo tú y yo podemos escribir</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
+
+    :root{
+      --bg:#000;
+      --bg2:#160006;
+      --gold:#F5D36A;
+      --heart-red:#ff1a3a;
+      --neon-green:#39ff14;
+      --neon-red:#ff073a;
+      --font-family:'Cinzel', serif;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: radial-gradient(circle at center, var(--bg2), var(--bg));
+      overflow:hidden;
+      font-family:var(--font-family);
+    }
+
+    .center-text{
+      position:absolute;
+      left:50%;
+      top:12%;
+      transform:translateX(-50%);
+      text-align:center;
+      z-index:10;
+      padding:0 18px;
+      animation:fadeIn 3s ease forwards;
+    }
+
+    .center-text h1{
+      margin:0;
+      font-size:clamp(22px,5vw,46px);
+      line-height:1.4;
+      color:var(--gold);
+      letter-spacing:2px;
+      text-shadow:
+        0 0 12px rgba(245,211,106,0.6),
+        0 0 30px rgba(245,211,106,0.35),
+        0 0 60px rgba(245,211,106,0.2);
+    }
+
+    .center-text p{
+      margin-top:18px;
+      font-size:16px;
+      color:#ff9aa8;
+      opacity:0.9;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0; transform:translate(-50%, -15%);}
+      to{opacity:1; transform:translate(-50%, 0);}
+    }
+
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    .heart{
+      position:absolute;
+      bottom:-15vh;
+      width:45px;
+      height:45px;
+      filter: drop-shadow(0 0 16px rgba(255,40,40,0.6));
+    }
+
+    .heart:before,
+    .heart:after{
+      content:'';
+      position:absolute;
+      width:50%;
+      height:50%;
+      background:var(--heart-red);
+      border-radius:50%;
+      top:0;
+      left:0;
+    }
+
+    .heart:after{left:50%}
+
+    .heart i{
+      position:absolute;
+      left:12%;
+      top:22%;
+      width:76%;
+      height:76%;
+      background:var(--heart-red);
+      transform:rotate(45deg);
+      border-radius:20%;
+    }
+
+    @keyframes riseFade{
+      0%{transform:translateY(0) scale(0.8);opacity:1}
+      50%{transform:translateY(-50vh) scale(1.1);opacity:0.6}
+      100%{transform:translateY(-100vh) scale(1.3);opacity:0}
+    }
+
+    .actions{
+      position:fixed;
+      left:50%;
+      bottom:6%;
+      transform:translateX(-50%);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      z-index:20;
+      width:80%;
+      max-width:280px;
+    }
+
+    .balloon{
+      padding:14px 22px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:16px;
+      user-select:none;
+      transition:all .3s ease;
+      letter-spacing:1px;
+    }
+
+    .green{
+      background:#001b00;
+      color:var(--neon-green);
+      border:2px solid var(--neon-green);
+      box-shadow:
+        0 0 14px rgba(57,255,20,0.9),
+        0 0 30px rgba(57,255,20,0.6);
+    }
+
+    .red{
+      background:#1a0008;
+      color:var(--neon-red);
+      border:2px solid var(--neon-red);
+      box-shadow:
+        0 0 14px rgba(255,7,58,0.9),
+        0 0 30px rgba(255,7,58,0.5);
+    }
+
+    .balloon.slippery{
+      position:fixed !important;
+      z-index:30;
+    }
+
+    .neon-player{
+      margin-top:30px;
+      padding:14px;
+      border-radius:20px;
+      width:260px;
+      background:#0d0005;
+      border:2px solid #ff073a;
+      box-shadow:
+        0 0 20px rgba(255,7,58,0.9),
+        0 0 50px rgba(255,7,58,0.4);
+    }
+  </style>
+</head>
+
+<body>
+
+<audio id="breakMusic" src="musica.mp3"></audio>
+
+<div class="center-text">
+  <h1>
+    Te contaría la historia de amor más hermosa del mundo  
+    pero primero necesito algo muy sencillo…
+  </h1>
+
+  <p>
+    Toma mi mano, mírame con el corazón  
+    y prometamos escribirla juntos 
+  </p>
+</div>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="actions">
+  <button class="balloon green slippery" id="tryBtn"></button>
+  <button class="balloon red" id="endBtn">❤️ Aquí comienza nuestro “para siempre” ❤️</button>
+</div>
+
+<script>
+function rand(min,max){return Math.random()*(max-min)+min}
+
+const hearts=document.getElementById('hearts');
+for(let i=0;i<22;i++){
+  const h=document.createElement('div');
+  h.className='heart';
+  const s=rand(20,60);
+  h.style.width=s+'px';
+  h.style.height=s+'px';
+  h.style.left=rand(0,100)+'%';
+  h.style.animation=`riseFade ${rand(6,14)}s linear ${rand(-8,0)}s forwards`;
+  h.appendChild(document.createElement('i'));
+  hearts.appendChild(h);
+}
+
+const tryBtn=document.getElementById('tryBtn');
+function escape(){
+  tryBtn.style.opacity=0;
+  setTimeout(()=>{
+    tryBtn.style.left=rand(0,window.innerWidth-tryBtn.offsetWidth)+'px';
+    tryBtn.style.top=rand(0,window.innerHeight-tryBtn.offsetHeight)+'px';
+    tryBtn.style.opacity=1;
+  },250);
+}
+
+document.addEventListener('mousemove',escape);
+tryBtn.addEventListener('touchstart',e=>{e.preventDefault();escape();});
+
+document.getElementById('endBtn').onclick=()=>{
+  document.getElementById('breakMusic').play().catch(()=>{});
+  document.body.innerHTML=`
+    <div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#ff073a;padding:20px;">
+      <h2 style="font-size:30px;">❤️ Te amo ❤️</h2>
+      <p style="font-size:18px;max-width:320px;">
+        No hay palabras suficientes para describir lo que siento por ti  
+        Por favor entra a Telegram con el siguiente audio
+      </p>
+      <audio class="neon-player" controls autoplay>
+        <source src="musica.mp3" type="audio/mpeg">
+      </audio>
+    </div>`;
+};
+</script>
+
+</body>
+</html>
